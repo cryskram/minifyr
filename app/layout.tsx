@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Orbit, Orbitron } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const orbit = Orbit({ weight: ["400"], subsets: ["latin"] });
 
@@ -16,8 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${orbit.className} bg-mBackground text-white`}>
+      <body
+        className={`${orbit.className} bg-mBackground text-white flex flex-col min-h-screen justify-between`}
+      >
         {children}
+        <Footer />
       </body>
     </html>
   );
