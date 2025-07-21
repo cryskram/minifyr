@@ -22,13 +22,19 @@ export default function Homepage() {
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [customAlias, setCustomAlias] = useState("");
 
   const handleShorten = async (e: FormEvent) => {
     e.preventDefault();
+    setError("");
+    setResult("");
+    setIsCopied(false);
+
     try {
       setLoading(true);
       const sendReq = await axios.post("/api/shorten", {
         url: url.trim(),
+        alias: customAlias.trim(),
       });
 
       const res: ResponseProp = sendReq.data;
@@ -38,7 +44,11 @@ export default function Homepage() {
       }
     } catch (e: any) {
       console.error("Error occured:", e);
-      setError(e);
+      if (e.response.status === 409) {
+        setError("This alias is already taken. Please choose a different one.");
+      } else {
+        setError(e?.response?.data?.message || "Something went wrong!");
+      }
     } finally {
       setLoading(false);
     }
@@ -85,7 +95,20 @@ export default function Homepage() {
             name="originalurl"
             id="originalurl"
             placeholder="Enter the url to shorten..."
+            required
           />
+          <input
+            value={customAlias}
+            onChange={(e) => setCustomAlias(e.target.value)}
+            className={`mt-4 px-4 py-2 md:px-6 md:py-3 w-11/12 md:w-2/3 text-base md:text-lg outline-none rounded-xl shadow-lg text-black ${
+              error.includes("alias") ? "border-4 border-red-500" : ""
+            }`}
+            type="text"
+            name="customAlias"
+            id="customAlias"
+            placeholder="Custom alias (optional)"
+          />
+
           <button
             className="mt-6 bg-mGreen rounded-2xl text-lg md:text-2xl px-4 py-2 md:px-6 md:py-3 text-mBackground font-bold border-2 border-mGreen hover:bg-mBackground hover:text-mGreen transition duration-300"
             type="submit"

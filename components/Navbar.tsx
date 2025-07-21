@@ -10,8 +10,8 @@ const Navbar = () => {
         target="_blank"
         className="border-2 border-mGreen rounded-xl px-4 py-2 flex items-center gap-4 justify-center"
       >
-        <FaGithub size={30} />
-        <h1 className="text-xl">See the code</h1>
+        <FaGithub size={20} />
+        <h1 className="text-lg">See the code</h1>
       </Link>
     </div>
   );
